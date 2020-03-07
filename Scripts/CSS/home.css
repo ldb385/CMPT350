@@ -1,0 +1,50 @@
+
+body, html {
+  height: 100%;
+}
+
+.bgLogin {
+  /* The image used */
+  background-image: url("./../.././Images/loginBackground.png");
+
+  background-color: #e6e4e0;
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bsLogin h1 {
+  padding: 70px;
+  font-size: 80px;
+  color: #9b806e;
+  size: 400px;
+	margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%) 
+}
+
+.bsLogin body {
+  height: 5000px; /* Make this site really long */
+  width: 5000px; /* Make this site really wide */
+  overflow: hidden; /* Hide scrollbars */
+}
+
+.bsLogin button {
+  padding: 30px;
+  background-color: #cc6600;
+  color: #ffd5ac;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%) 
+}
+

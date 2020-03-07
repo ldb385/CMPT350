@@ -1,0 +1,41 @@
+
+
+
+reviewTemp {
+    padding-left: 50px;
+}
+
+.reviewTemp img {
+    clear: both;
+    float: left;
+    padding-left: 50px;
+    padding: 20px;
+    height: 300px;
+    width: 400px;
+}
+
+.reviewTemp pre {
+    padding-left: 500px;
+    white-space: pre-wrap;
+    font-size: 16px;
+    color: #44443b;
+}
+
+.reviewTemp h1 {
+    padding-left: 16px;
+    float: left;
+    color: #90462c;
+}
+
+.reviewTemp hr {
+    clear: both;
+    border: 10px solid #44443b;
+    border-radius: 5px;
+}
+
+.reviewTemp button {
+    float: left;
+    height: 60px;
+    width: 20%;
+    clear: both;
+}

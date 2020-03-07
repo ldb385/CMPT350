@@ -1,0 +1,16 @@
+{
+    "plsql-language.connections": [
+        {
+            "ID": 2,
+            "active": true,
+            "database": "SYS.PicRevDB",
+            "hidden": false,
+            "password": "Test1234",
+            "privilege": "SYSDBA",
+            "username": "Sys",
+            "name": "Sys@SYS.PicRevDB"
+        }
+    ],
+    "plsql-language.connection.activeInfos": "Sys/Test1234@SYS.PicRevDB",
+    "liveServer.settings.port": 5501
+}

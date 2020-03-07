@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Import style sheets -->
+        <link type="text/css" rel="stylesheet" href="./Scripts/CSS/browse.css" />
+		<link type="text/css" rel="stylesheet" href="./Scripts/CSS/reviewTemplate.css" />
+
+		<!-- import jquery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+
+		<!-- import javascript files -->
+		<script src="./Scripts/Javascript/addReviewOperations.js"></script>
+		<script src="./Scripts/Javascript/addLikeOperations.js"></script>
+
+		<Title>PicRevBrowse</Title>
+	</head>
+
+	<body style="background-color: #e6e4e0;">
+
+		<!-- This will function as a header of website -->
+		<div class="header">
+			<h1>PicReview - Browse</h1>
+			<br>
+		</div>
+		
+
+		<!-- this is just to help with formatting-->
+		<br>
+		<br>
+		<br>
+		<br>
+
+		<div id="ReviewsAdded" class="reviewTemp"></div>
+
+		<!-- to simplify adding reviews we will use a template -->
+		<template id="ReviewsTemplate">
+			<hr>
+			<img id="pic" src="#" alt="Review" />
+			<br>
+			<pre id="des"></pre>
+			<h1 id="rating"></h1>
+			<h1>/ 5</h1>
+			<br>
+			<button id="likebutton" onclick="likeReview( this )">Like</button>
+			<h1>Likes: </h1>
+			<h1 id="likeheader" >0</h1>
+			<hr>
+		</template>
+	</body>
+
+
+	<!-- This is just to contain buttons Exit and Add -->
+	<body>
+
+		<button onclick="document.getElementById('id03').style.display='block'" id="addbutton" style="width:auto;" >Add Review</button>
+		<button onclick="document.getElementById('id04').style.display='block'" id="signoutbutton" style="width:auto;" >Exit</button>
+		
+		<!-- this is the add feature for creating new reviewed images -->
+		<div id="id03" class="modal">
+		
+		<form class="modal-content animate" id="PostReview" action="/uploadFile" method="post" enctype="multipart/form-data">
+
+			<div class="container">
+
+			<div class="imgcontainer">
+				<span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+			</div>
+
+			<!-- Take in Image -->
+			<label for="image">Choose an picture to accompany review:</label>
+			<br>
+			<br>
+			<input class="inputfile" type="file" id="image" name="imageToUpload" accept="image/png, image/jpeg" required>
+			<br>
+			<br>
+
+			
+			<!-- Description -->
+			<textarea type="text" placeholder="Enter Description" name="description" id="description" cols="160" rows="12" required></textarea>
+			<br>
+			<br>
+
+			<!-- radio buttons for rating -->
+			<label for="rate"><b>Rating: &emsp;</b></label>
+			1 <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+			<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+			<input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+			<input type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+			<input type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5"> 5
+			<br>
+			<br>
+				
+			<!-- Sumbit fields -->
+			<button type="submit" id="submitRev">Add</button>
+			</div>
+
+			<div class="container" style="background-color:#f1f1f1">
+			<button type="button" onclick="document.getElementById('id03').style.display='none'" class="cancelbtn">Cancel</button>
+			</div>
+		</form>
+		</div>
+
+	
+		<!-- Simple signout option goes back to main page -->
+		<div id="id04" class="modal">
+		
+		<form class="modal-content animate" action="./home" method="post">
+			<div class="imgcontainer">
+			<span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+			</div>
+
+
+			<div class="container">
+			<h2><b>Are you sure you wish to leave</b></h2>
+				
+			<button type="submit">Exit</button>
+			</div>
+
+			<div class="container" style="background-color:#f1f1f1">
+			<button type="button" onclick="document.getElementById('id04').style.display='none'" class="cancelbtn">Cancel</button>
+			</div>
+		</form>
+		</div>
+	</body>
+</html>
