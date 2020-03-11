@@ -27,6 +27,11 @@ reviewTemp {
     color: #90462c;
 }
 
+.reviewTemp h3 {
+    padding-left: 16px;
+    color: #90462c;
+}
+
 .reviewTemp hr {
     clear: both;
     border: 10px solid #44443b;

@@ -55,6 +55,56 @@ app.post("/seeReviews", function(req, res ){
     res.sendFile( __dirname + "/browse.html");
 });
 
+// <><><><><><> SETUP LOGIN SYSTEM <><><><><><><>
+app.post("/signUp", function(req, res ){
+    var user = req.body.username;
+    var pass = req.body.psw;
+
+    // Insert the user in DB
+    var sqlUserIns = "INSERT INTO users ( user, password ) VALUES ('" + user + "','" + pass + "')";
+    con.query(sqlUserIns, function (err, result) {
+        if (err){
+            res.sendFile( __dirname + "/browse.html");
+        } else {
+            console.log( user + " joined picReview.");
+        }
+    });
+    res.redirect('back');
+});
+
+app.get("/signIn", function(req, res ){
+    var user = req.query.usr;
+    var pass = req.query.psw;
+
+    console.log( "Verifying " + user + " and " + pass + ".");
+
+    // check if user has account
+    var sqlUserIns = "SELECT * FROM users WHERE user='" + user.toString() + "'";
+    con.query(sqlUserIns, function (err, result) {
+        if (err){
+            // error
+            res.send( {validUser: false} );
+            console.log( "Invalid user" );
+        } else {
+            if( result.length > 0 ){
+                if( pass.toString() == result[0].password.toString() ){
+                    console.log( "valid user" );
+                    res.send( {validUser: true} );
+                } else {
+                    // password incorrect
+                    res.send( {validUser: false} );
+                    console.log( "Invalid user" );
+                }
+            } else {
+                // user not defined 
+                res.send( {validUser: false} );
+                console.log( "Invalid user" );
+            }
+        }
+    });
+});
+
+
 
 // <><><><><><> SETUP LIKE SYSTEM <><><><><><><>
 app.post("/likeReview", function(req, res ){
@@ -65,7 +115,6 @@ app.post("/likeReview", function(req, res ){
         if (err) throw err;
         console.log("like inserted");
         });
-    res.redirect('back');
 });
 
 app.get("/likeReviewUpdate", function(req, res ){
@@ -106,9 +155,8 @@ app.post('/uploadFile',function(req,res){
         if(err) {
             return res.end("Error uploading file.");
         }
-        res.sendFile(__dirname + "/browse.html");
+        res.redirect("back");
     });
-    res.redirect('back');
 });
 
 // <><><><><><> BROWSE FEATURE FUNCTIONALITY <><><><><><>
@@ -133,6 +181,7 @@ app.post('/reviews', (req, res ) => {
     var description = req.body.des;
     var imagePath = req.body.img;
     var radio = req.body.rad;
+    var user = req.body.usr;
 
     var date = new Date;
     var t = Math.round( date.getTime() );
@@ -143,7 +192,7 @@ app.post('/reviews', (req, res ) => {
         var newPath = "http://127.0.0.1:8887/" + change.toString() + "_" + ( imagePath ).replace("C:\\fakepath\\", "");
 
         // insert the review to the sql db
-        var sqlRecIns = "INSERT INTO reviews ( image, description, rate, time ) VALUES ('" + newPath + "','" + description.toString() + "','" + radio + "','" + t.toString() + "')";
+        var sqlRecIns = "INSERT INTO reviews ( image, description, rate, user, time ) VALUES ('" + newPath.toString() + "','" + description.toString() + "','" + radio + "','" + user.toString() + "','" + t.toString() + "')";
         con.query(sqlRecIns, function (err, result) {
             if (err) throw err;
             console.log("review inserted");
@@ -165,7 +214,7 @@ app.post('/reviews', (req, res ) => {
 
 // simple get for testing purposes. would like to make sure db connects
 app.get('/testingConnectionToDatabase',function(req,res){
-    con.query( "SELECT * FROM reviews INNER JOIN likes", function (err, result){
+    con.query( "SELECT * FROM reviews INNER JOIN likes INNER JOIN users", function (err, result){
         if(err) throw err;
         res.send(result);
     });

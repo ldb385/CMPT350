@@ -1,22 +1,12 @@
 
 
 /**
- * called on load of page
- */
-$(() => {
-    // page was loaded, will set an onclick listener and load the stored reviews and likes
-    $("#submitRev").click(() => {
-        sendReview( getElementsOfReview() );
-    } )
-    getReviews();
-    getLikes();
-} )
-
-/**
  * this will retrieve the values stored in the form when a send request
  * is processed and format data into a dictionary
  */
 function getElementsOfReview(){
+
+    var user = getUser();
 
     var descrip = $("#description").val();
     var image = $("#image").val();
@@ -39,7 +29,8 @@ function getElementsOfReview(){
     return {
         img: image,
         des: descrip,
-        rad: radio
+        rad: radio,
+        usr: user
     }
 }
 
@@ -52,7 +43,7 @@ function getReviews(){
         for (let index = 0; index < data.length; index++) {
             addReview( data[index] );
         }
-    })
+    });
 }
 
 /**
@@ -62,13 +53,14 @@ function getReviews(){
  * @param {*} review 
  */
 function addReview( review ){
-    var rTemplate, rClone, i, d, r, b, h;
+    var rTemplate, rClone, i, d, r, b, h, w;
 
     rTemplate = document.getElementById("ReviewsTemplate");
     // create a clone of template so can add items to it
     rClone = rTemplate.content.cloneNode(true);
 
     // get the elements of cloned templates
+    w = rClone.querySelector('#user');
     i = rClone.querySelector('#pic');
     d = rClone.querySelector('#des');
     r = rClone.querySelector('#rating');
@@ -76,6 +68,7 @@ function addReview( review ){
     h = rClone.querySelector('#likeheader');
 
     // Set the elements of the cloned template
+    w.textContent = "Written by: " + review.user;
     i.src = review.image;
     d.textContent = review.description;
     r.textContent = review.rate;

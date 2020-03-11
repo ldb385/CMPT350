@@ -14,6 +14,8 @@
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
 
 		<!-- import javascript files -->
+		<script src="./Scripts/Javascript/onLoadOfBrowse.js"></script>
+		<script src="./Scripts/Javascript/userValidation.js"></script>
 		<script src="./Scripts/Javascript/addReviewOperations.js"></script>
 		<script src="./Scripts/Javascript/addLikeOperations.js"></script>
 
@@ -40,13 +42,14 @@
 		<!-- to simplify adding reviews we will use a template -->
 		<template id="ReviewsTemplate">
 			<hr>
+			<h3 id="user">written by: </h3>
 			<img id="pic" src="#" alt="Review" />
 			<br>
 			<pre id="des"></pre>
 			<h1 id="rating"></h1>
 			<h1>/ 5</h1>
 			<br>
-			<button id="likebutton" onclick="likeReview( this )">Like</button>
+			<button id="likebutton" name="unlockable" onclick="likeReview( this )">Like</button>
 			<h1>Likes: </h1>
 			<h1 id="likeheader" >0</h1>
 			<hr>
@@ -57,18 +60,20 @@
 	<!-- This is just to contain buttons Exit and Add -->
 	<body>
 
-		<button onclick="document.getElementById('id03').style.display='block'" id="addbutton" style="width:auto;" >Add Review</button>
-		<button onclick="document.getElementById('id04').style.display='block'" id="signoutbutton" style="width:auto;" >Exit</button>
+		<button onclick="document.getElementById('addReviewToSite').style.display='block'" name="unlockable" id="addbutton" style="width:auto;" >Add Review</button>
+		<button onclick="document.getElementById('exitSite').style.display='block'" id="exitbutton" style="width:auto;" >Exit</button>
+		<button onclick="document.getElementById('signIn').style.display='block'" id="signinbutton" style="width:auto;" >SignIn</button>
+		<button onclick="document.getElementById('signUp').style.display='block'" id="signupbutton" style="width:auto;" >SignUp</button>
 		
 		<!-- this is the add feature for creating new reviewed images -->
-		<div id="id03" class="modal">
+		<div id="addReviewToSite" class="modal">
 		
 		<form class="modal-content animate" id="PostReview" action="/uploadFile" method="post" enctype="multipart/form-data">
 
 			<div class="container">
 
 			<div class="imgcontainer">
-				<span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+				<span onclick="document.getElementById('addReviewToSite').style.display='none'" class="close" title="Close Modal">&times;</span>
 			</div>
 
 			<!-- Take in Image -->
@@ -100,18 +105,18 @@
 			</div>
 
 			<div class="container" style="background-color:#f1f1f1">
-			<button type="button" onclick="document.getElementById('id03').style.display='none'" class="cancelbtn">Cancel</button>
+			<button type="button" onclick="document.getElementById('addReviewToSite').style.display='none'" class="cancelbtn">Cancel</button>
 			</div>
 		</form>
 		</div>
 
 	
 		<!-- Simple signout option goes back to main page -->
-		<div id="id04" class="modal">
+		<div id="exitSite" class="modal">
 		
 		<form class="modal-content animate" action="./home" method="post">
 			<div class="imgcontainer">
-			<span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+			<span onclick="document.getElementById('exitSite').style.display='none'" class="close" title="Close Modal">&times;</span>
 			</div>
 
 
@@ -122,9 +127,77 @@
 			</div>
 
 			<div class="container" style="background-color:#f1f1f1">
-			<button type="button" onclick="document.getElementById('id04').style.display='none'" class="cancelbtn">Cancel</button>
+				<button type="button" onclick="document.getElementById('exitSite').style.display='none'" class="cancelbtn">Cancel</button>
 			</div>
 		</form>
 		</div>
+
+
+		<!-- Simple signin option allows users to be associated with reviews and limit likes -->
+		<div id="signIn" class="modal">
+		
+			<form class="modal-content animate" >
+				<div class="imgcontainer">
+				<span onclick="document.getElementById('signIn').style.display='none'" class="close" title="Close Modal">&times;</span>
+				</div>
+	
+	
+				<div class="container">
+
+					<h1>Sign in</h1>
+					<p>Please fill in this form to login to your account.</p>
+					<hr>
+
+
+					<label for="username"><b>Username</b></label>
+					<input type="text" placeholder="Enter Username" name="username" id="siUsername" required>
+			  
+					<label for="psw"><b>Password</b></label>
+					<input type="password" placeholder="Enter Password" name="psw" id="siPassword" required>
+
+					<button type="submit" id="siButton" >Sign In</button>
+			  
+				</div>
+	
+				<div class="container" style="background-color:#f1f1f1">
+					<button type="button" onclick="document.getElementById('signIn').style.display='none'" class="cancelbtn">Cancel</button>
+				</div>
+
+				
+			</form>
+		</div>
+
+		<!-- Simple signup option allows users to be associated with reviews and limit likes -->
+		<div id="signUp" class="modal">
+
+			<form class="modal-content animate" action="/signUp" method="post" >
+				<div class="imgcontainer">
+				<span onclick="document.getElementById('signUp').style.display='none'" class="close" title="Close Modal">&times;</span>
+				</div>
+	
+	
+				<div class="container">
+
+					<h1>Sign up</h1>
+					<p>Please fill in this form to create an account.</p>
+					<hr>
+
+
+					<label for="username"><b>Username</b></label>
+					<input type="text" placeholder="Enter Username" name="username" required>
+				
+					<label for="psw"><b>Password</b></label>
+					<input type="password" placeholder="Enter Password" name="psw" required>
+
+					<button type="submit">Sign Up</button>
+				
+				</div>
+	
+				<div class="container" style="background-color:#f1f1f1">
+					<button type="button" onclick="document.getElementById('signUp').style.display='none'" class="cancelbtn">Cancel</button>
+				</div>
+			</form>
+		</div>
+
 	</body>
 </html>

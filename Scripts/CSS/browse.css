@@ -55,16 +55,36 @@ button:hover {
   opacity: 0.8;
 }
 
+button:disabled,
+button[disabled]{
+  background-color: #cc6600;
+  opacity: 0.75;
+  color: white;
+}
+
+
 #addbutton {
 	position: fixed;
 	top: 5px;
 	right: 100px;
 }
 
-#signoutbutton {
+#exitbutton {
 	position: fixed;
 	top: 5px;
 	right: 30px;
+}
+
+#signinbutton {
+	position: fixed;
+	top: 5px;
+	left: 30px;
+}
+
+#signupbutton {
+	position: fixed;
+	top: 5px;
+	left: 115px;
 }
 
 /* Extra styles for the cancel button */
