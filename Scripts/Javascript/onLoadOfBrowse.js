@@ -25,33 +25,29 @@ $(() => {
 
     setTimeout( function(){
         checkIfLoggedIn();
-    }, 250 );
+    }, 350 );
 
 } );
 
 function checkIfLoggedIn(){
-    var url = window.location.search.substr(1).toString();
-    if( url != "" ){
-        var user = url.split("&")[0].toString().split("=")[1].toString();
-        var pass = url.split("&")[1].toString().split("=")[1].toString();
-    
-        var boUser = validateUser({
-            usr: user,
-            psw: pass} );
 
-        console.log( boUser );
-    
-        setTimeout( function() {
-            if( boUser ){
-                unlockButtons();
-            } else {
-                lockButtons();
-            }
-    
-        }, 500 );
-    } else {
-        lockButtons();
-    }
+    var user = getUser().toString();
+    var pass = getPass().toString();
+
+    var boUser = validateUser({
+        usr: user,
+        psw: pass} );
+
+    console.log( boUser );
+
+    setTimeout( function() {
+        if( boUser ){
+            unlockButtons();
+        } else {
+            lockButtons();
+        }
+
+    }, 250 );
 
 }
 
@@ -65,7 +61,7 @@ function unlockButtons(){
     } else {
         setTimeout(function() {
             unlockButtons();
-        }, 500);
+        }, 250);
     }
 }
 
@@ -78,6 +74,6 @@ function lockButtons(){
     } else {
         setTimeout(function() {
             lockButtons();
-        }, 500);
+        }, 250);
     }
 }

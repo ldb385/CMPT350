@@ -13,6 +13,17 @@ app.use( express.static(__dirname));
 var d = new Date;
 var change = Math.round( d.getTime() );
 
+var session = require("express-session");
+
+app.use(
+    session({
+        resave: false,
+        saveUninitialized: false,
+        secret: 'debug',
+        cookie: { secure: false }
+    })
+);
+
 
 var con = mysql.createConnection({
     host: 'localhost',
@@ -31,20 +42,29 @@ var server = app.listen(3012, () => {
     console.log('Server is running on port', server.address().port );
 });
 
+
+
 // <><><><><><> POPULATE DEFAULT PAGE <><><><><><><>
 app.get('/',function(req,res){
     res.sendFile(__dirname + "/home.html");
 });
 
 
+
 // <><><><><><> SETUP SIMPLE HOME PAGE <><><><><><><>
 app.get('/home',function(req,res){
+    req.session.user = null;
+    req.session.pass = null;
     res.sendFile(__dirname + "/home.html");
 });
 
 app.post('/home',function(req,res){
+    req.session.user = null;
+    req.session.pass = null;
     res.sendFile(__dirname + "/home.html");
 });
+
+
 
 // <><><><><><> MOVE TO BROWSE PAGE <><><><><><><>
 app.get("/seeReviews", function(req, res ){
@@ -55,10 +75,15 @@ app.post("/seeReviews", function(req, res ){
     res.sendFile( __dirname + "/browse.html");
 });
 
+
+
 // <><><><><><> SETUP LOGIN SYSTEM <><><><><><><>
 app.post("/signUp", function(req, res ){
     var user = req.body.username;
     var pass = req.body.psw;
+
+    req.session.user = user;
+    req.session.pass = pass;
 
     // Insert the user in DB
     var sqlUserIns = "INSERT INTO users ( user, password ) VALUES ('" + user + "','" + pass + "')";
@@ -72,36 +97,85 @@ app.post("/signUp", function(req, res ){
     res.redirect('back');
 });
 
-app.get("/signIn", function(req, res ){
-    var user = req.query.usr;
-    var pass = req.query.psw;
+app.get("/validate", function(req, res ){
+    var user = req.session.user;
+    var pass = req.session.pass;
 
-    console.log( "Verifying " + user + " and " + pass + ".");
+    if( !user ){
+        console.log("no user signed in");
+        res.send( {validUser: false} );
+    } else {
+
+        console.log( "Verifying " + user + " and " + pass + ".");
+
+        // check if user has account
+        var sqlUserIns = "SELECT * FROM users WHERE user='" + user.toString() + "'";
+        con.query(sqlUserIns, function (err, result) {
+            if (err){
+                // error
+                console.log( "Invalid user" );
+                res.send( {validUser: false} );
+            } else {
+                if( result.length > 0 ){
+                    if( pass.toString() == result[0].password.toString() ){
+                        console.log( "valid user" );
+                        res.send( {validUser: true} );
+                    } else {
+                        // password incorrect
+                        console.log( "Invalid user" );
+                        res.send( {validUser: false} );
+                    }
+                } else {
+                    // user not defined 
+                    console.log( "Invalid user" );
+                    res.send( {validUser: false} );
+                }
+            }
+        });
+    }
+});
+
+app.post("/signIn", function(req, res ){
+    var user = req.body.usr;
+    var pass = req.body.psw;
+
+    req.session.user = user;
+    req.session.pass = pass;
+
+    console.log( "Creating " + user + " and " + pass + ".");
 
     // check if user has account
     var sqlUserIns = "SELECT * FROM users WHERE user='" + user.toString() + "'";
     con.query(sqlUserIns, function (err, result) {
         if (err){
             // error
-            res.send( {validUser: false} );
             console.log( "Invalid user" );
+            res.redirect("back");
         } else {
             if( result.length > 0 ){
                 if( pass.toString() == result[0].password.toString() ){
                     console.log( "valid user" );
-                    res.send( {validUser: true} );
+                    res.redirect("seeReviews");
                 } else {
                     // password incorrect
-                    res.send( {validUser: false} );
                     console.log( "Invalid user" );
+                    res.redirect("back");
                 }
             } else {
                 // user not defined 
-                res.send( {validUser: false} );
                 console.log( "Invalid user" );
+                res.redirect("back");
             }
         }
     });
+});
+
+app.get("/currentUser", function(req, res ){
+
+    var user = req.session.user;
+    var pass = req.session.pass;
+
+    res.send( { usr: user, psw: pass })
 });
 
 
@@ -114,6 +188,7 @@ app.post("/likeReview", function(req, res ){
     con.query(sqlLikeIns, function (err, result) {
         if (err) throw err;
         console.log("like inserted");
+        res.redirect("seeReviews");
         });
 });
 
@@ -139,6 +214,7 @@ app.get("/likeReview", function(req, res ){
 });
 
 
+
 // <><><><><><> TAKE IN IMAGE ATTACHED TO REVIEW <><><><><><><>
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -158,6 +234,8 @@ app.post('/uploadFile',function(req,res){
         res.redirect("back");
     });
 });
+
+
 
 // <><><><><><> BROWSE FEATURE FUNCTIONALITY <><><><><><>
 
@@ -207,7 +285,7 @@ app.post('/reviews', (req, res ) => {
     } else {
         console.log("Missing fields, not inserted");
     }
-    res.redirect('back');
+    res.redirect('/seeReviews');
 });
 
 

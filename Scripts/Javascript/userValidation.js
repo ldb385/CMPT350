@@ -15,10 +15,11 @@ function getSignIn(){
     }
 }
 
+
 function validateUser( userInfo ){
     jQuery.ajaxSetup({async:false});
     var s = false;
-    $.get('http://localhost:3012/signIn?usr='+userInfo.usr+'&psw='+userInfo.psw+'', (data) => {
+    $.get('http://localhost:3012/validate', (data) => {
         if( data.validUser ){
             console.log( "valid" );
             s = true;
@@ -30,12 +31,31 @@ function validateUser( userInfo ){
     return s;
 }
 
+
 function getUser(){
-    var url = window.location.search.substr(1).toString();
-    if( url != "" ){
-        var user = url.split("&")[0].toString().split("=")[1].toString();
-        return user;
-    } else { 
-        return "";
-    }
+
+    jQuery.ajaxSetup({async:false});
+    var usr = "";
+
+    $.get('http://localhost:3012/currentUser', (data) => {
+        usr = data[0].user;
+    })
+
+    jQuery.ajaxSetup({async:true});
+    return usr;
 }
+
+
+function getPass(){
+
+    jQuery.ajaxSetup({async:false});
+    var psw = "";
+
+    $.get('http://localhost:3012/currentUser', (data) => {
+        psw = data[0].pass;
+    })
+
+    jQuery.ajaxSetup({async:true});
+    return psw;
+}
+
