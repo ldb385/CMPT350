@@ -12,7 +12,7 @@
     "connect-busboy": "0.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6",
+    "express-fileupload": "^1.1.9",
     "express-session": "^1.17.0",
     "express-sessions": "^1.0.6",
     "formidable": "^1.2.2",
